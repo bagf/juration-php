@@ -10,10 +10,7 @@ class BasicTimeParsingTest extends TestCase
         $this->assertEquals(1, Juration::parse('1 sec'));
         $this->assertEquals(3, Juration::parse('2s 1second'));
         $this->assertEquals(2, Juration::parse('2seconds'));
-        /**
-         * @todo this breaks it
-         */
-        //$this->assertEquals(1, Juration::parse('1.5s'));
+        $this->assertEquals(1, Juration::parse('1.5s'));
     }
 
     public function testMinutes()
@@ -21,7 +18,7 @@ class BasicTimeParsingTest extends TestCase
         $this->assertEquals(60, Juration::parse('1 m'));
         $this->assertEquals(180, Juration::parse('2mins 1min'));
         $this->assertEquals(120, Juration::parse('2minutes'));
-        $this->assertEquals(150, Juration::parse('1.5m'));
+        $this->assertEquals(90, Juration::parse('1.5m'));
     }
 
     public function testHours()
@@ -43,7 +40,7 @@ class BasicTimeParsingTest extends TestCase
     public function testWeeks()
     {
         $this->assertEquals(604800, Juration::parse('1 w'));
-        $this->assertEquals(1844000, Juration::parse('2wks 1wk'));
+        $this->assertEquals(1814400, Juration::parse('2wks 1wk'));
         $this->assertEquals(1209600, Juration::parse('2weeks'));
         $this->assertEquals(907200, Juration::parse('1.5ws'));
     }
