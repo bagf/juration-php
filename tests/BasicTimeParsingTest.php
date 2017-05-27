@@ -60,4 +60,9 @@ class BasicTimeParsingTest extends TestCase
         $this->assertEquals(63072000, Juration::parse('2years'));
         $this->assertEquals(47304000, Juration::parse('1.5ys'));
     }
+
+    public function testMixed()
+    {
+        $this->assertEquals(34866121, Juration::parse('1 second 2 minutes 3 hours 1 day 1 week 1 month 1 year'));
+    }
 }
