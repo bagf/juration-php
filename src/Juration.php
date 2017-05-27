@@ -130,7 +130,7 @@ class Juration
             throw new Exception(__CLASS__ . "::" . __METHOD__ . "(): Unable to stringify a non-numeric value");
         }
 
-        if (in_array($format, ['mirco', 'short', 'long'])) {
+        if (!in_array($format, ['mirco', 'short', 'long'])) {
             throw new Exception("juration.stringify(): format cannot be '{$format}', and must be either 'micro', 'short', or 'long'");
         }
         $unitTypes = ['years', 'months', 'days', 'hours', 'minutes', 'seconds'];
@@ -161,7 +161,7 @@ class Juration
             }
         }
 
-        $output = str_replace(' ', '', $output);
+        $output = trim($output);
         if (substr($output, 0, 3) == '00:') {
             $output = substr($output, 3);
         }
