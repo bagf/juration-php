@@ -107,6 +107,72 @@ class Juration
         return $matches;
     }
 
+    protected static function pluralize($count, $singular)
+    {
+        return $count == 1 ? $singular : $singular . "s";
+    }
+
+    protected static function padLeft($s, $c, $n)
+    {
+        if (!$s || !$c || strlen($s) >= $n) {
+            return $s;
+        }
+        $max = ($n - strlen($s)) / strlen($c);
+        for ($i = 0; $i < $max; $i++) {
+            $s = $c + $s;
+        }
+        return $s;
+    }
+
+    public static function stringify($seconds, $format = 'short', $units = null)
+    {
+        if (!is_numeric($seconds)) {
+            throw new Exception(__CLASS__ . "::" . __METHOD__ . "(): Unable to stringify a non-numeric value");
+        }
+
+        if (in_array($format, ['mirco', 'short', 'long'])) {
+            throw new Exception("juration.stringify(): format cannot be '{$format}', and must be either 'micro', 'short', or 'long'");
+        }
+        $unitTypes = ['years', 'months', 'days', 'hours', 'minutes', 'seconds'];
+        $values = [];
+        $remaining = $seconds;
+        $activeUnits = 0;
+        foreach ($unitTypes as $unitType) {
+            $unit = static::UNITS[$unitType];
+            $val = floor($remaining / $unit['value']);
+            if ($val > 0 || $activeUnits > 0) {
+                $activeUnits++;
+            }
+
+            if ($format === 'micro' || $format === 'chrono') {
+                $val .= $unit['formats'][$format];
+            } else {
+                $val .= ' ' . static::pluralize($val, $unit['formats'][$format]);
+            }
+            $remaining = $remaining % $unit['value'];
+            $values[] = $val;
+        }
+        $output = '';
+        foreach ($values as $i => $value) {
+            if (substr($value, 0, 1) !== "0" && $format != 'chrono') {
+                $output .= $value . ' ';
+            } else if ($format == 'chrono') {
+                $output .= static::padLeft($value + '', '0', $i == strlen($values) - 1 ? 2 : 3);
+            }
+        }
+
+        $output = str_replace(' ', '', $output);
+        if (substr($output, 0, 3) == '00:') {
+            $output = substr($output, 3);
+        }
+
+        if (substr($output, 0, 1) == '0') {
+            $output = substr($output, 1);
+        }
+
+        return $output;
+    }
+
     /**
      * @param string $string
      * @return int
