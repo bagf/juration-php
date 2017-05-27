@@ -18,4 +18,9 @@ composer test
 ### Usage
 ```php
 Juration\Juration::parse('2min'); // 120
+Juration\Juration::parse('2min and 1hr'); // 3720
+Juration\Juration::stringify(12); // 12 secs
+Juration\Juration::stringify(184); // 3 mins 4 secs
+Juration\Juration::stringify(8400); // 2 hrs 20 mins
+Juration\Juration::stringify(15854400); // 6 mths 1 day
 ```
